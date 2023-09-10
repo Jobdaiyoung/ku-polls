@@ -93,7 +93,7 @@ class QuestionModelTests(TestCase):
         can_vote() return True with for the question without end_date
         """
         pub_time = timezone.now() - datetime.timedelta(minutes=5)
-        question = Question(pub_time=pub_time)
+        question = Question(pub_date=pub_time)
         self.assertTrue(question.can_vote())
 
 
