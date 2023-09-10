@@ -26,15 +26,17 @@ class Question(models.Model):
         """
         Checks if the question is currently published.
         """
-        return self.pub_date <= timezone.now
+        now = timezone.now()
+        return self.pub_date <= now
 
     def can_vote(self):
         """
         Checks if users can vote on the question.
         """
+        now = timezone.now()
         if not self.is_published():
             return False
-        if self.pub_date <= timezone.now <= self.end_date or \
+        if self.pub_date <= now <= self.end_date or \
                 self.end_date is None:
             return True
         return False
