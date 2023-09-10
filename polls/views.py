@@ -1,4 +1,3 @@
-from django.http import HttpResponseRedirect
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from .models import Question, Choice
 from django.template import loader
@@ -7,6 +6,8 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.contrib import messages
+from django.shortcuts import redirect
 
 from .models import Choice, Question
 
@@ -34,10 +35,40 @@ class DetailView(generic.DetailView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
 
+    def get(self, request, **kwargs):
+        """Handle GET requests in detailView"""
+        try:
+            question = get_object_or_404(Question, pk=kwargs["pk"])
+        except Http404:
+            messages.error(request,
+                           f"Poll number {kwargs['pk']} does not exists.")
+            return redirect("polls:index")
+        if not question.is_published():
+            messages.error(request,
+                           f"Poll number {question.id} Already closed.")
+            return redirect("polls:index")
+        return render(request, self.template_name, {"question": question})
+
 
 class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
+
+    def get(self, request, *args, **kwargs):
+        """
+        Handel the Get request for the ResultsView.
+        """
+        try:
+            question = get_object_or_404(Question, pk=kwargs["pk"])
+        except Http404:
+            messages.error(request,
+                           f"Poll number {kwargs['pk']} does not exists.")
+            return redirect("polls:index")
+        if not question.is_published():
+            messages.error(request,
+                           f"Poll number {question.id} Already closed.")
+            return redirect("polls:index")
+        return render(request, self.template_name, {"question": question})
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -65,6 +96,7 @@ def vote(request: HttpRequest, question_id: int) -> HttpResponse:
         return render(request, 'polls/detail.html', {
             'question': question,
             'error_message': "You didn't select a choice.",
+            'message': "You didn't select a choice.",
         })
     else:
         selected_choice.votes += 1
