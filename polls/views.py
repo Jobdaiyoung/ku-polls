@@ -13,6 +13,9 @@ from .models import Choice, Question
 
 
 class IndexView(generic.ListView):
+    """
+    View for listing the latest polls.
+    """
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
@@ -26,6 +29,9 @@ class IndexView(generic.ListView):
 
 
 class DetailView(generic.DetailView):
+    """
+    View for viewing the details of a poll.
+    """
     model = Question
     template_name = "polls/detail.html"
 
@@ -51,6 +57,9 @@ class DetailView(generic.DetailView):
 
 
 class ResultsView(generic.DetailView):
+    """
+    View for displaying the results of a poll.
+    """
     model = Question
     template_name = 'polls/results.html'
 
@@ -72,22 +81,34 @@ class ResultsView(generic.DetailView):
 
 
 def index(request: HttpRequest) -> HttpResponse:
+    """
+    Function-based view for listing the latest polls (fallback for IndexView).
+    """
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
     context = {'latest_question_list': latest_question_list}
     return render(request, 'polls/index.html', context)
 
 
 def detail(request: HttpRequest, question_id: int) -> HttpResponse:
+    """
+    Function-based view for viewing the details of a poll (fallback for DetailView).
+    """
     question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/detail.html', {'question': question})
 
 
 def results(request: HttpRequest, question_id: int) -> HttpResponse:
+    """
+    Function-based view for displaying the results of a poll (fallback for ResultsView).
+    """
     question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/results.html', {'question': question})
 
 
 def vote(request: HttpRequest, question_id: int) -> HttpResponse:
+    """
+    Function-based view for voting on a poll.
+    """
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
