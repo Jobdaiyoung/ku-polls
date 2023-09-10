@@ -16,6 +16,18 @@ class Question(models.Model):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
+    def is_published(self):
+        return self.pub_date <= timezone.now
+
+    def can_vote(self):
+        if not self.is_published():
+            return False
+        if self.pub_date <= timezone.now <= self.end_date or \
+                self.end_date is None:
+            return True
+        return False
+
+
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
