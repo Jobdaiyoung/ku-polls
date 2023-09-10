@@ -1,46 +1,114 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
+from .models import Question, Choice
+from django.template import loader
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.contrib import messages
+from django.shortcuts import redirect
 
 from .models import Choice, Question
 
 
 class IndexView(generic.ListView):
+    """
+    View for listing the latest polls.
+    """
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
-
-    def get_queryset(self):
-        """Return the last five published questions."""
-        return Question.objects.order_by("-pub_date")[:5]
 
     def get_queryset(self):
         """
         Return the last five published questions (not including those set to be
         published in the future).
         """
-        return Question.objects.filter(
-            pub_date__lte=timezone.now()
-        ).order_by('-pub_date')[:5]
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by(
+            '-pub_date')[:5]
 
 
 class DetailView(generic.DetailView):
+    """
+    View for viewing the details of a poll.
+    """
     model = Question
     template_name = "polls/detail.html"
+
     def get_queryset(self):
         """
         Excludes any questions that aren't published yet.
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
 
+    def get(self, request, **kwargs):
+        """Handle GET requests in detailView"""
+        try:
+            question = get_object_or_404(Question, pk=kwargs["pk"])
+        except Http404:
+            messages.error(request,
+                           f"Poll number {kwargs['pk']} does not exists.")
+            return redirect("polls:index")
+        if not question.is_published():
+            messages.error(request,
+                           f"Poll number {question.id} Already closed.")
+            return redirect("polls:index")
+        return render(request, self.template_name, {"question": question})
+
 
 class ResultsView(generic.DetailView):
+    """
+    View for displaying the results of a poll.
+    """
     model = Question
     template_name = 'polls/results.html'
 
+    def get(self, request, *args, **kwargs):
+        """
+        Handel the Get request for the ResultsView.
+        """
+        try:
+            question = get_object_or_404(Question, pk=kwargs["pk"])
+        except Http404:
+            messages.error(request,
+                           f"Poll number {kwargs['pk']} does not exists.")
+            return redirect("polls:index")
+        if not question.is_published():
+            messages.error(request,
+                           f"Poll number {question.id} Already closed.")
+            return redirect("polls:index")
+        return render(request, self.template_name, {"question": question})
 
-def vote(request, question_id):
+
+def index(request: HttpRequest) -> HttpResponse:
+    """
+    Function-based view for listing the latest polls (fallback for IndexView).
+    """
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    context = {'latest_question_list': latest_question_list}
+    return render(request, 'polls/index.html', context)
+
+
+def detail(request: HttpRequest, question_id: int) -> HttpResponse:
+    """
+    Function-based view for viewing the details of a poll (fallback for DetailView).
+    """
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/detail.html', {'question': question})
+
+
+def results(request: HttpRequest, question_id: int) -> HttpResponse:
+    """
+    Function-based view for displaying the results of a poll (fallback for ResultsView).
+    """
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/results.html', {'question': question})
+
+
+def vote(request: HttpRequest, question_id: int) -> HttpResponse:
+    """
+    Function-based view for voting on a poll.
+    """
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
@@ -49,6 +117,7 @@ def vote(request, question_id):
         return render(request, 'polls/detail.html', {
             'question': question,
             'error_message': "You didn't select a choice.",
+            'message': "You didn't select a choice.",
         })
     else:
         selected_choice.votes += 1
