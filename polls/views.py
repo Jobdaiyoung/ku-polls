@@ -1,6 +1,5 @@
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from .models import Question, Choice
-from django.template import loader
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -8,8 +7,6 @@ from django.views import generic
 from django.utils import timezone
 from django.contrib import messages
 from django.shortcuts import redirect
-
-from .models import Choice, Question
 
 
 class IndexView(generic.ListView):
@@ -80,31 +77,6 @@ class ResultsView(generic.DetailView):
         return render(request, self.template_name, {"question": question})
 
 
-def index(request: HttpRequest) -> HttpResponse:
-    """
-    Function-based view for listing the latest polls (fallback for IndexView).
-    """
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'polls/index.html', context)
-
-
-def detail(request: HttpRequest, question_id: int) -> HttpResponse:
-    """
-    Function-based view for viewing the details of a poll (fallback for DetailView).
-    """
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'question': question})
-
-
-def results(request: HttpRequest, question_id: int) -> HttpResponse:
-    """
-    Function-based view for displaying the results of a poll (fallback for ResultsView).
-    """
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'question': question})
-
-
 def vote(request: HttpRequest, question_id: int) -> HttpResponse:
     """
     Function-based view for voting on a poll.
@@ -117,7 +89,6 @@ def vote(request: HttpRequest, question_id: int) -> HttpResponse:
         return render(request, 'polls/detail.html', {
             'question': question,
             'error_message': "You didn't select a choice.",
-            'message': "You didn't select a choice.",
         })
     else:
         selected_choice.votes += 1
