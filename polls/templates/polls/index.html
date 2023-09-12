@@ -10,6 +10,13 @@
 </ul>
 {% endif %}
 
+<div class="container">
+    {% if user.is_authenticated %}
+        Welcome back, {{ user.first_name.title }}
+    {% else %}
+        Please <a href="{% url 'login' %}?next={{request.path}}">Login</a>
+    {% endif %}
+
 {% if latest_question_list %}
     <ul>
     {% for question in latest_question_list %}
