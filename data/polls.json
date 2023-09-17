@@ -1,0 +1,108 @@
+[
+{
+  "model": "polls.question",
+  "pk": 1,
+  "fields": {
+    "question_text": "How did you first become interested in programming?",
+    "pub_date": "2023-08-30T07:25:45Z",
+    "end_date": "2023-09-15T16:59:59Z"
+  }
+},
+{
+  "model": "polls.question",
+  "pk": 2,
+  "fields": {
+    "question_text": "When you face programming problems, how do you usually seek help?",
+    "pub_date": "2023-09-03T07:36:29Z",
+    "end_date": "2023-09-20T16:59:59Z"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 101,
+  "fields": {
+    "question": 1,
+    "choice_text": "Personal interest or hobby"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 102,
+  "fields": {
+    "question": 1,
+    "choice_text": "Required for work or education"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 103,
+  "fields": {
+    "question": 1,
+    "choice_text": "Inspired by an influencer"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 104,
+  "fields": {
+    "question": 2,
+    "choice_text": "Visit online forums and communities like Stack Overflow"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 105,
+  "fields": {
+    "question": 2,
+    "choice_text": "Ask a friend"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 106,
+  "fields": {
+    "question": 2,
+    "choice_text": "Read official documentation"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 107,
+  "fields": {
+    "question": 2,
+    "choice_text": "Watch video tutorials"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 108,
+  "fields": {
+    "question": 2,
+    "choice_text": "Solve it by myself"
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 1,
+  "fields": {
+    "choice": 103,
+    "user": 2
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 2,
+  "fields": {
+    "choice": 107,
+    "user": 1
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 3,
+  "fields": {
+    "choice": 107,
+    "user": 2
+  }
+}
+]

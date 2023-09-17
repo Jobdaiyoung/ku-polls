@@ -1,11 +1,12 @@
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
-from .models import Question, Choice
+from .models import Question, Choice, Vote
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
 
@@ -50,7 +51,16 @@ class DetailView(generic.DetailView):
             messages.error(request,
                            f"Poll number {question.id} Already closed.")
             return redirect("polls:index")
-        return render(request, self.template_name, {"question": question})
+
+        choice_selected = None
+        if request.user.is_authenticated:
+            try:
+                vote = Vote.objects.get(user=request.user,
+                                        choice__question=question)
+                choice_selected = vote.choice
+            except Vote.DoesNotExist:
+                choice_selected = None
+        return render(request, self.template_name, {"question": question, "choice_selected": choice_selected})
 
 
 class ResultsView(generic.DetailView):
@@ -77,6 +87,7 @@ class ResultsView(generic.DetailView):
         return render(request, self.template_name, {"question": question})
 
 
+@login_required
 def vote(request: HttpRequest, question_id: int) -> HttpResponse:
     """
     Function-based view for voting on a poll.
@@ -90,10 +101,19 @@ def vote(request: HttpRequest, question_id: int) -> HttpResponse:
             'question': question,
             'error_message': "You didn't select a choice.",
         })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+    current_user = request.user
+    try:
+        #find a vote for this user and this question
+        vote = Vote.objects.get(user=current_user, choice__question=question)
+        #update his vote
+        vote.choice = selected_choice
+    except Vote.DoesNotExist:
+        #no matching Vote - create new one
+        vote = Vote(user=current_user, choice=selected_choice)
+
+    vote.save()
+
+    #TODO: Use messages to display a confirmation on the results page.
+    messages.success(request,
+                     f"You have voted -({selected_choice})- for this poll.")
+    return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))

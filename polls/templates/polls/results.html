@@ -1,3 +1,11 @@
+<div class="container">
+    {% if user.is_authenticated %}
+        Welcome, {{ user.username.title }}
+        <br>
+        <a href="{% url 'logout'%}">Logout</a>
+    {% else %}
+        Please <a href="{% url 'login' %}?next={{request.path}}">Login</a>
+    {% endif %}
 <h1>{{ question.question_text }}</h1>
 
 <table>
@@ -16,5 +24,11 @@
         {% endfor %}
     </tbody>
 </table>
-
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 <a href="{% url 'polls:index' %}">Back</a>

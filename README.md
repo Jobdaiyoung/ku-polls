@@ -9,6 +9,12 @@ additional features.
 This app was created as part of the [Individual Software Process](
 https://cpske.github.io/ISP) course at Kasetsart University.
 
+## Demo Users
+| Username   | Password |
+|------------|----------|
+| jirapatchu | hahaha   |
+| username1  | pass1    |
+
 ## Install and Run
 
 to be added.
