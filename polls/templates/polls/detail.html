@@ -12,11 +12,15 @@
     <legend><h1>{{ question.question_text }}</h1></legend>
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     {% for choice in question.choice_set.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        {% if choice == choice_selected %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" checked>
+        {% else %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        {% endif %}
         <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
     {% endfor %}
 </fieldset>
 <input type="submit" value="Vote">
-    <a href="{% url 'polls:results' question.id %}">Results</a>
+    <a href="{% url 'polls:results' question.id %}">Results</a><br>
 </form>
 <a href="{% url 'polls:index'%}" > Back</a>
