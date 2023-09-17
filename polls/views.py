@@ -51,12 +51,15 @@ class DetailView(generic.DetailView):
             messages.error(request,
                            f"Poll number {question.id} Already closed.")
             return redirect("polls:index")
-        try:
-            vote = Vote.objects.get(user=request.user,
-                                    choice__question=question)
-            choice_selected = vote.choice
-        except Vote.DoesNotExist:
-            choice_selected = None
+
+        choice_selected = None
+        if request.user.is_authenticated:
+            try:
+                vote = Vote.objects.get(user=request.user,
+                                        choice__question=question)
+                choice_selected = vote.choice
+            except Vote.DoesNotExist:
+                choice_selected = None
         return render(request, self.template_name, {"question": question, "choice_selected": choice_selected})
 
 
