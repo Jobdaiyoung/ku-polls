@@ -1,0 +1,56 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$395iWILRqfiIAOK2bXpJPD$M4+bDdyEfLBuzuTqyY8Qa8Tru4TBu7+a5lmii6AyMR4=",
+    "last_login": "2023-09-12T09:29:47.021Z",
+    "is_superuser": true,
+    "username": "Jirapatchu",
+    "first_name": "",
+    "last_name": "",
+    "email": "jirapat.chu@ku.th",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2023-09-11T06:50:11.086Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$xTe7QG3taaiFD3wu62ZVuP$Rr90jG8kA/bMOei2zrqtCFOS+II8TkzxnyCh/rnO6gw=",
+    "last_login": "2023-09-17T11:14:18.814Z",
+    "is_superuser": false,
+    "username": "jirapatchu",
+    "first_name": "Jirapat",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2023-09-12T07:40:41.378Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$be1te25TrkKfrCxVqGYoBg$qB2tt0vdb4SEN/+U6Sg26ZOuT0a/HmRhQeMk6IuOZDo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "username1",
+    "first_name": "Usernameone",
+    "last_name": "",
+    "email": "usernameone@user.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2023-09-17T13:15:22.634Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]
