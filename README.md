@@ -28,6 +28,6 @@ All project documents are in the [Project Wiki](../../wiki/Home).
 - [Development Plan](../../wiki/Development-Plan)
 - [Iteration 1 Plan](../../wiki/Iteration-1-Plan) and [Task Board](https://github.com/users/Jobdaiyoung/projects/2/views/5)
 - [Iteration 2 Plan](../../wiki/Iteration-2-Plan) and [Task Board](https://github.com/users/Jobdaiyoung/projects/2/views/7)
-- - [Iteration 3 Plan](../../wiki/Iteration-3-Plan) and [Task Board]([https://github.com/users/Jobdaiyoung/projects/2/views/9)
+- [Iteration 3 Plan](../../wiki/Iteration-3-Plan) and [Task Board]([https://github.com/users/Jobdaiyoung/projects/2/views/9)
 
 [django-tutorial]: https://docs.djangoproject.com/en/4.1/intro/tutorial01/
