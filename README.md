@@ -9,6 +9,11 @@ additional features.
 This app was created as part of the [Individual Software Process](
 https://cpske.github.io/ISP) course at Kasetsart University.
 
+## Demo Admin
+| Username   | Password |
+|------------|----------|
+|   Admin1   | Adminsocool |
+
 ## Demo Users
 | Username   | Password |
 |------------|----------|
