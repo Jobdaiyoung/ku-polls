@@ -236,21 +236,5 @@
     "question": 6,
     "choice_text": "I don't handle stress well and need guidance."
   }
-},
-{
-  "model": "polls.vote",
-  "pk": 1,
-  "fields": {
-    "choice": 102,
-    "user": 2
-  }
-},
-{
-  "model": "polls.vote",
-  "pk": 2,
-  "fields": {
-    "choice": 102,
-    "user": 4
-  }
 }
 ]
