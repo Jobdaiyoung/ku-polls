@@ -60,7 +60,9 @@ class DetailView(generic.DetailView):
                 choice_selected = vote.choice
             except Vote.DoesNotExist:
                 choice_selected = None
-        return render(request, self.template_name, {"question": question, "choice_selected": choice_selected})
+        return render(request, self.template_name, {"question": question,
+                                                    "choice_selected":
+                                                        choice_selected})
 
 
 class ResultsView(generic.DetailView):
@@ -99,12 +101,12 @@ def vote(request: HttpRequest, question_id: int) -> HttpResponse:
         })
     current_user = request.user
     try:
-        #find a vote for this user and this question
+        # find a vote for this user and this question
         vote = Vote.objects.get(user=current_user, choice__question=question)
-        #update his vote
+        # update his vote
         vote.choice = selected_choice
     except Vote.DoesNotExist:
-        #no matching Vote - create new one
+        # no matching Vote - create new one
         vote = Vote(user=current_user, choice=selected_choice)
 
     vote.save()

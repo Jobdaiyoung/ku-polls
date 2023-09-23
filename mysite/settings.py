@@ -23,7 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config(
     "SECRET_KEY",
-    default="django-insecure-e5s1c8=yo@6t6+!uuk+sdl8@#gufm^f7eofi12$a3b#8t6@e@(")
+    default="django-insecure-e5s1c8=yo@6t6+!uuk+sdl8@#gufm^f7eofi12$a3b#8t6@e@("
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
@@ -92,7 +93,6 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 AUTHENTICATION_BACKENDS = [
-    # username & password authentication
    'django.contrib.auth.backends.ModelBackend',
 ]
 

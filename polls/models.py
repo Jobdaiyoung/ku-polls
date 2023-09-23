@@ -57,9 +57,8 @@ class Choice(models.Model):
         """
         count the vote for the Choice
         """
-        #count = Vote.objects.filter(choice=self).count()
+        # count = Vote.objects.filter(choice=self).count()
         return self.vote_set.count()
-
 
     def __str__(self):
         return self.choice_text
