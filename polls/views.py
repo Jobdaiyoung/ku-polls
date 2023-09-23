@@ -47,9 +47,9 @@ class DetailView(generic.DetailView):
             messages.error(request,
                            f"Poll number {kwargs['pk']} does not exists.")
             return redirect("polls:index")
-        if not question.is_published():
+        if not question.can_vote():
             messages.error(request,
-                           f"Poll number {question.id} Already closed.")
+                           f"Poll -{question.question_text}- is Already closed.")
             return redirect("polls:index")
 
         choice_selected = None
@@ -80,10 +80,6 @@ class ResultsView(generic.DetailView):
             messages.error(request,
                            f"Poll number {kwargs['pk']} does not exists.")
             return redirect("polls:index")
-        if not question.is_published():
-            messages.error(request,
-                           f"Poll number {question.id} Already closed.")
-            return redirect("polls:index")
         return render(request, self.template_name, {"question": question})
 
 
@@ -113,7 +109,6 @@ def vote(request: HttpRequest, question_id: int) -> HttpResponse:
 
     vote.save()
 
-    #TODO: Use messages to display a confirmation on the results page.
     messages.success(request,
                      f"You have voted -({selected_choice})- for this poll.")
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
