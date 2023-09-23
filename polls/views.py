@@ -23,7 +23,7 @@ class IndexView(generic.ListView):
         published in the future).
         """
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by(
-            '-pub_date')[:5]
+            '-pub_date')
 
 
 class DetailView(generic.DetailView):
@@ -47,9 +47,9 @@ class DetailView(generic.DetailView):
             messages.error(request,
                            f"Poll number {kwargs['pk']} does not exists.")
             return redirect("polls:index")
-        if not question.is_published():
+        if not question.can_vote():
             messages.error(request,
-                           f"Poll number {question.id} Already closed.")
+                           f"Poll -{question.question_text}- is Already closed.")
             return redirect("polls:index")
 
         choice_selected = None
@@ -60,7 +60,9 @@ class DetailView(generic.DetailView):
                 choice_selected = vote.choice
             except Vote.DoesNotExist:
                 choice_selected = None
-        return render(request, self.template_name, {"question": question, "choice_selected": choice_selected})
+        return render(request, self.template_name, {"question": question,
+                                                    "choice_selected":
+                                                        choice_selected})
 
 
 class ResultsView(generic.DetailView):
@@ -79,10 +81,6 @@ class ResultsView(generic.DetailView):
         except Http404:
             messages.error(request,
                            f"Poll number {kwargs['pk']} does not exists.")
-            return redirect("polls:index")
-        if not question.is_published():
-            messages.error(request,
-                           f"Poll number {question.id} Already closed.")
             return redirect("polls:index")
         return render(request, self.template_name, {"question": question})
 
@@ -103,17 +101,16 @@ def vote(request: HttpRequest, question_id: int) -> HttpResponse:
         })
     current_user = request.user
     try:
-        #find a vote for this user and this question
+        # find a vote for this user and this question
         vote = Vote.objects.get(user=current_user, choice__question=question)
-        #update his vote
+        # update his vote
         vote.choice = selected_choice
     except Vote.DoesNotExist:
-        #no matching Vote - create new one
+        # no matching Vote - create new one
         vote = Vote(user=current_user, choice=selected_choice)
 
     vote.save()
 
-    #TODO: Use messages to display a confirmation on the results page.
     messages.success(request,
                      f"You have voted -({selected_choice})- for this poll.")
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))

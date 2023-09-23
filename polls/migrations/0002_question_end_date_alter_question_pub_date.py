@@ -22,7 +22,8 @@ class Migration(migrations.Migration):
             model_name="question",
             name="pub_date",
             field=models.DateTimeField(
-                default=django.utils.timezone.now, verbose_name="date published"
+                default=django.utils.timezone.now,
+                verbose_name="date published"
             ),
         ),
     ]

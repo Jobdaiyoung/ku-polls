@@ -16,16 +16,18 @@ from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config(
     "SECRET_KEY",
-    default="django-insecure-e5s1c8=yo@6t6+!uuk+sdl8@#gufm^f7eofi12$a3b#8t6@e@(")
+    default="django-insecure-e5s1c8=yo@6t6+!uuk+sdl8@#gufm^f7eofi12$a3b#8t6@e@("
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = config("DEBUG", default=True, cast=bool)
 
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
@@ -33,16 +35,17 @@ ALLOWED_HOSTS = config(
     cast=lambda a: [s.strip() for s in a.split(",")],
 )
 
+
 # Application definition
 
 INSTALLED_APPS = [
-    'polls.apps.PollsConfig',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "polls.apps.PollsConfig",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 ]
 
 MIDDLEWARE = [
@@ -60,7 +63,7 @@ ROOT_URLCONF = "mysite.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [BASE_DIR/"templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -75,6 +78,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "mysite.wsgi.application"
 
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -85,13 +89,13 @@ DATABASES = {
     }
 }
 
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
 AUTHENTICATION_BACKENDS = [
-    # username & password authentication
-    'django.contrib.auth.backends.ModelBackend',
+   'django.contrib.auth.backends.ModelBackend',
 ]
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -108,20 +112,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#Where to redirect visitor after login or logout
+# Where yo recdirect visitor after login or logout
 LOGIN_REDIRECT_URL = 'polls:index'    # after login, show list of polls
-LOGOUT_REDIRECT_URL = 'polls:index'         # after logout, direct to where?
+LOGOUT_REDIRECT_URL = 'login'         # after logout, direct to where?
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = config('TIME_ZONE', default='Asia/Bangkok')
+TIME_ZONE = config("TIME_ZONE", default="Asia/Bangkok")
 
 USE_I18N = True
 
 USE_TZ = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

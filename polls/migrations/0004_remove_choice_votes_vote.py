@@ -32,7 +32,8 @@ class Migration(migrations.Migration):
                 (
                     "choice",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="polls.choice"
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="polls.choice"
                     ),
                 ),
                 (
