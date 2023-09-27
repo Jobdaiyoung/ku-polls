@@ -47,6 +47,10 @@ class DetailView(generic.DetailView):
             messages.error(request,
                            f"Poll number {kwargs['pk']} does not exists.")
             return redirect("polls:index")
+        if not question.is_published():
+            messages.error(request,
+                           f"Poll number {kwargs['pk']} does not exists.")
+            return redirect("polls:index")
         if not question.can_vote():
             messages.error(request,
                            f"Poll -{question.question_text}- is Already closed.")
@@ -82,6 +86,10 @@ class ResultsView(generic.DetailView):
             messages.error(request,
                            f"Poll number {kwargs['pk']} does not exists.")
             return redirect("polls:index")
+        if not question.is_published():
+            messages.error(request,
+                           f"Poll number {kwargs['pk']} does not exists.")
+            return redirect("polls:index")
         return render(request, self.template_name, {"question": question})
 
 
@@ -95,10 +103,15 @@ def vote(request: HttpRequest, question_id: int) -> HttpResponse:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         # Redisplay the question voting form.
-        return render(request, 'polls/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
+        if question.can_vote():
+            return render(request, 'polls/detail.html', {
+                'question': question,
+                'error_message': "You didn't select a choice.",
+            })
+        else:
+            messages.error(request,
+                           f"Poll -{question.question_text}- is Already closed.")
+            return redirect("polls:index")
     current_user = request.user
     try:
         # find a vote for this user and this question

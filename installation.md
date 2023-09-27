@@ -41,8 +41,8 @@
 
 ### Load initial data
    ```terminal
-   python manage.py loaddata data/polls-v2.json 
    python manage.py loaddata data/users.json
+   python manage.py loaddata data/polls-v2.json 
    ```
 
 ### Run server
